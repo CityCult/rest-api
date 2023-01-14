@@ -1,0 +1,146 @@
+openapi: 3.0.0
+info:
+  version: 2.0.0-alpha
+  title: City:Cult REST-API
+  description: Collection of events and venues with its details.
+
+
+paths:
+  /event:
+    get:
+      description: Returns a list of events
+      responses:
+        '200':
+          description: Successfully returned a list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+
+  /event/{eventUid}:
+    get:
+      description: Obtain information about an event from its unique ID
+      parameters:
+        - name: eventUid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully returned an event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+  /venue:
+    get:
+      description: Returns a list of venues
+      responses:
+        '200':
+          description: Successfully returned a list of venues
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Venue'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+
+  /venue/{venueUid}:
+    get:
+      description: Obtain information about an venue from its unique ID
+      parameters:
+        - name: venueUid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully returned an venue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venue'
+
+
+components:            
+  schemas:
+    Venue:
+      type: object
+      required:
+        - venueUid
+        - name
+        - city
+      properties:
+        venueUid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        street:
+          type: string
+        postcode:
+          type: integer
+        city:
+          type: string
+        description:
+          type: string
+        website:
+          type: string
+    Event:
+      type: object
+      required:
+        - eventUid
+        - name
+        - startDate
+        - hasStartTime
+        - categoryId
+        - venue
+      properties:
+        eventUid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        hasStartTime:
+          type: boolean
+        endDate:
+          type: string
+          format: date-time
+        hasEndTime:
+          type: boolean
+        description:
+          type: string
+        price:
+          type: number
+        categoryId:
+          type: integer
+        venue:
+          $ref: '#/components/schemas/Venue'
